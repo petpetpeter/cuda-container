@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  pytorch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pytorch-cuda
+    container_name: pytorch-dev
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    volumes:
+      - ./project:/project
+    working_dir: /project
+    stdin_open: true
+    tty: true
+    command: ["tail", "-f", "/dev/null"]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
